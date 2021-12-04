@@ -32,6 +32,31 @@ ejercicios indicados.
 - Analice el script `wav2lp.sh` y explique la misión de los distintos comandos involucrados en el *pipeline*
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
+ 
+  En este script vemos un "usage" que nos guia como se utiliza en el wav2lp.sh, que requiere de una señal .wav de entrada, y que nos devuelve un fichero salida.lp.
+  Como comentamos en la sesion de laborarorio, en el script wa2lp.sh vemos que se eliminan los ficheros temporales previamente al hacer la parametrización de la señal .wav.  Si existiesen ficheros temporales asociados a la parametrización, en este caso a través del cálculo de los coeficientes de predición lineal (LPC). Tambien un "usage" que nos indica como se utiliza el script, este necesita de una señal .wav de entrada, y que devuelve un fichero salida.lp.
+  
+  *****captura 1******
+  
+  Acto seguido, declaramos los parámetros que el usuario especifique en el momento en que se invoque el script. En este caso los parámetros importantes son los fichersos de entrada y salida y el número de coeficientes de prediccion lineal (LPC) que queremos que se calculen. Guardamos tanto en $1 como $2 y $3 los parámetros especificados en orden en la terminal. El $0 no lo usamos porque es el primer argumento de todos que habitualmente suele ser el propio nombre del script. Mas adelante, en función del valor de la variable de entorno UBUNTU_SPTK, especificamos como se invocan los programas y los comandos del paquete de código SPTK.
+  
+    *****captura 2******
+    
+    Una vez especificados los parámetros que el usuario escriba en la linea de comandos, pasamos a la función principal del script wav2lp.sh. Con el pipeline principal conseguimos una correcta extracción de caracteristicas para la señal, esto es asi debido a los programas especificados justo en el paso anterior. El pipeline principal es el que mostramos a continuacion:
+    
+    *****captura 3******
+    
+    Como comentamos en la sesión de laboratorio, en la pipeline siguiente, sox nos permite convertir la entrada (formato de ley mu) a enteros de 16 bits con signo. Este paso es fundamental porque los ficheros .wav estan codificados con la ley mu, pero el paso de despues de la parametrización con SPTK solo es capaz de leer señales tipo float4.
+    
+    *****captura 4******
+    
+    En el siguiente paso es cuando conseguimos convertir definitavamente los datos del archivo de entrada. Gracias a este paso lo tenemos en formato de enteros con signo de 2 bytes (+s). Y ahora lo pasamos a float de 4 bytes (+f).
+    
+     *****captura 5******
+    
+    En la siguiente captura usamos el programa "frame", este programa nos permite estructurar la ventana de extracción de datos de una secuencia. Como vimos en la sesion de laboratorio en este caso nos interesaria  elegir una ventana de 30ms y con frecuencia de muestreo de 8000Hz (perteneciente a una ventana de 240 muestras). Además hemos añadido un desplazaminento de 10ms entre las ventanas, es decir, 80 muestras.
+    
+    *****captura 6******
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
