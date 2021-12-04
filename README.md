@@ -57,26 +57,60 @@ ejercicios indicados.
     En la siguiente captura usamos el programa "frame", este programa nos permite estructurar la ventana de extracción de datos de una secuencia. Como vimos en la sesion de laboratorio en este caso nos interesaria  elegir una ventana de 30ms y con frecuencia de muestreo de 8000Hz (perteneciente a una ventana de 240 muestras). Además hemos añadido un desplazaminento de 10ms entre las ventanas, es decir, 80 muestras.
     
     *****captura 6******
-
+    
+    A continuación, usamos el programa "window" con el objetivo de  enventanar la señal. En primer lugar, determinamos el número de muestras que entran, que sabemos que son 240 muestras ya que lo hemos configurado previamente en la pipeline. Por último determinamos la longitud de lo que sale.
+    
+    *****captura 7******
+    
+    Para acabar con este apartado vamos con la parametrización por si misma. En la parametrizacion determinamos el numero de coeficientes LPC y el número de muestras.
+    
+    *****captura 8******
+    
+    
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
+  
+  *****captura 9******
+  
+  El objetivo que tenemos es obtener el número de columnas de la matriz, entonces con ese objetivo, el orden que especificamos es el numeros de coeficientes del LPC. Además hemos de tener en cuenta una unidad extra porque el primer valor corresponde a la ganancia. Utilizamos el comando perl con el propósito de calcular el número de filas. Lo primero que hacemos es pasar el contenido de los archivos temporales nuestros, que son un conjunto de floats de 4 bytes concatenados a formato ASCII. De esta manera se genera un archivo con un valor ASCII en cada una de las lineas, y con el comando "wc -l" extraemos el número de lineas de este archivo. Así pues, conoceremos la cantidad de valores que tenía nuestro fichero temporal. Entonces, si ademas sabemos el numero de columnas podremos obtener la cantidad de filas de la matriz, lo que podemos hacer es una división de la cantidad de datos totales entre el numero de columnas.
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
+    
+    Es conveniente usar este formato porque nos permite obtener el número de filas de la matriz, ya que previamente hemos convertido la señal tipo .wav codificada con la ley mu de 8 bits a el formato fmatrix. De esta manera, cada columna determina cada uno de los coeficientes con los que hemos parametrizado la trama. Además, este formato nos permite trabajar con los datos de manera más sencilla. 
+
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
+  
+  *****captura 10******
+  
+  Como podemos apreciar, la pipeline principal de la parametrización LPCC sigue la misma forma que la parametrización hecha previamente. Aunque con la diferencia   que ahora hay que tener en cuenta que para encontrar los coeficientes cepstrales antes necesitamos sacar los coeficientes LPC. Por este motivo, antes de autorizar  los datos de la parametrización cepstral al archivo .lpcc, tenemos que sacar con anterioridad los coeficientes LPC con el comando "lpc".
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+  
+  Ahora seguimos con la misma filosofia, sin embargo, ahora queremos obtener los coeficientes Mel-cepstrum, entonces con este proposito utilizaremos el comando "mfcc". En este comando especificamos el número de coeficientes y también el banco de filtros que utilizamos.
 
 ### Extracción de características.
+
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
   
+  
+   *****captura 11******
+   
+   *****captura 12******
+   
+   *****captura 13******
+   
+  
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+    
+    
+    
   + ¿Cuál de ellas le parece que contiene más información?
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
