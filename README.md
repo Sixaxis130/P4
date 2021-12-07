@@ -33,64 +33,59 @@ ejercicios indicados.
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
  
-  En este script vemos un "usage" que nos guia como se utiliza en el wav2lp.sh, que requiere de una señal .wav de entrada, y que nos devuelve un fichero salida.lp.
-  Como comentamos en la sesion de laborarorio, en el script wa2lp.sh vemos que se eliminan los ficheros temporales previamente al hacer la parametrización de la señal .wav.  Si existiesen ficheros temporales asociados a la parametrización, en este caso a través del cálculo de los coeficientes de predición lineal (LPC). Tambien un "usage" que nos indica como se utiliza el script, este necesita de una señal .wav de entrada, y que devuelve un fichero salida.lp.
+  Dentro de este script encontramos como usar el wav2lp.sh, este mismo requiere de una señal .wav de entrada y que nos devuelve un archivo output.lp.
+  Como comentamos en la sesion de laborarorio, en el script wa2lp.sh vemos que se eliminan los ficheros temporales previamente al hacer la parametrización de la señal .wav. En este caso utilizamos lo hacemos a través del calculo de los coeficientes de predición lineal (LPC). 
   
-  *****captura 1******
+  <img width="427" alt="Captura de Pantalla 2021-12-07 a les 12 18 27" src="https://user-images.githubusercontent.com/91251152/145019899-030203c2-3c96-4e57-95e2-c9acef4ccd40.png">
+
+  Acto seguido, declaramos los parámetros que el usuario tendrá que introducir en el momento en que se invoque dicho script. En este caso los parámetros importantes son el número de coeficientes de prediccion lineal (LPC), los ficheros de entrada y salida que queremos utilizar en el proceso. Guardamos tanto en $1, como en $2, y en $3 los parámetros especificados en orden pasados per la terminal introducidos por el usuario. El $0 no lo usamos para evitar posibles problemas debido a que se suele definir como el propio nombre del script al ser el primer argumento de todos. Más adelante, en función del valor de la variable de entorno UBUNTU_SPTK, especificamos como se invocan los programas y los comandos del paquete de código SPTK.
   
-  Acto seguido, declaramos los parámetros que el usuario especifique en el momento en que se invoque el script. En este caso los parámetros importantes son los fichersos de entrada y salida y el número de coeficientes de prediccion lineal (LPC) que queremos que se calculen. Guardamos tanto en $1 como $2 y $3 los parámetros especificados en orden en la terminal. El $0 no lo usamos porque es el primer argumento de todos que habitualmente suele ser el propio nombre del script. Mas adelante, en función del valor de la variable de entorno UBUNTU_SPTK, especificamos como se invocan los programas y los comandos del paquete de código SPTK.
-  
-    *****captura 2******
+    <img width="592" alt="Captura de Pantalla 2021-12-07 a les 12 25 58" src="https://user-images.githubusercontent.com/91251152/145020931-8274b798-ceb3-4940-8e12-50c1338844cc.png">
     
-    Una vez especificados los parámetros que el usuario escriba en la linea de comandos, pasamos a la función principal del script wav2lp.sh. Con el pipeline principal conseguimos una correcta extracción de caracteristicas para la señal, esto es asi debido a los programas especificados justo en el paso anterior. El pipeline principal es el que mostramos a continuacion:
+    Una vez especificados los parámetros que el usuario deberá escribir en la linea de comandos, pasamos a la función principal del script wav2lp.sh. Con el pipeline principal conseguimos una correcta extracción de las caracteristicas de la señal debido a los programas especificados justo en el paso anterior. El pipeline principal es el que mostramos a continuacion:
     
-    *****captura 3******
+    <img width="941" alt="Captura de Pantalla 2021-12-07 a les 12 28 29" src="https://user-images.githubusercontent.com/91251152/145021262-5bb3d1a0-325b-4bf8-a15d-550ddaadd6f8.png">
+
+ 
+    Como comentamos en la sesión de laboratorio, en la primera pipeline el sox nos permite convertir la entrada (formato de ley mu) a enteros de 16 bits con signo. Este paso es fundamental porque los ficheros .wav estan codificados con la ley mu y la parametrización con SPTK solo es capaz de leer señales tipo float4, siendo crucial este cambio para su correcta lectura.
     
-    Como comentamos en la sesión de laboratorio, en la pipeline siguiente, sox nos permite convertir la entrada (formato de ley mu) a enteros de 16 bits con signo. Este paso es fundamental porque los ficheros .wav estan codificados con la ley mu, pero el paso de despues de la parametrización con SPTK solo es capaz de leer señales tipo float4.
+    Con la siguiente pipeline conseguimos convertir los datos del archivo de entrada. Después de este paso, utilizando las diferentes opciones que nos ofrece el "X2X", obteniendo en formato de enteros con signo de 2 bytes usando (+s) para luego pasarlo a float de 4 bytes mediante (+f).
     
-    *****captura 4******
+    En la siguiente pipeline usamos el programa "FRAME", este programa nos permite estructurar la ventana de extracción de datos de una secuencia. Como vimos en la sesion de laboratorio en este caso nos interesaria  elegir una ventana de 30ms y con frecuencia de muestreo de 8000Hz (perteneciente a una ventana de 240 muestras). Además hemos añadido un desplazaminento de 10ms entre las ventanas, es decir, 80 muestras.
     
-    En el siguiente paso es cuando conseguimos convertir definitavamente los datos del archivo de entrada. Gracias a este paso lo tenemos en formato de enteros con signo de 2 bytes (+s). Y ahora lo pasamos a float de 4 bytes (+f).
-    
-     *****captura 5******
-    
-    En la siguiente captura usamos el programa "frame", este programa nos permite estructurar la ventana de extracción de datos de una secuencia. Como vimos en la sesion de laboratorio en este caso nos interesaria  elegir una ventana de 30ms y con frecuencia de muestreo de 8000Hz (perteneciente a una ventana de 240 muestras). Además hemos añadido un desplazaminento de 10ms entre las ventanas, es decir, 80 muestras.
-    
-    *****captura 6******
-    
-    A continuación, usamos el programa "window" con el objetivo de  enventanar la señal. En primer lugar, determinamos el número de muestras que entran, que sabemos que son 240 muestras ya que lo hemos configurado previamente en la pipeline. Por último determinamos la longitud de lo que sale.
-    
-    *****captura 7******
-    
-    Para acabar con este apartado vamos con la parametrización por si misma. En la parametrizacion determinamos el numero de coeficientes LPC y el número de muestras.
-    
-    *****captura 8******
+    En la penúltima pipeline usamos el programa "WINDOW" con el objetivo de enventanar la señal. En primer lugar, determinamos el número de muestras que entran, que sabemos que son 240 ya que lo hemos configurado previamente en la pipeline. Por último determinamos la longitud de salida.
+
+    Para acabar usamos el programa "LPC" con el que determinamos el número de muestras y el número de coeficientes LPC en base a su orden.
     
     
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
   
-  *****captura 9******
+  <img width="943" alt="Captura de Pantalla 2021-12-07 a les 12 44 47" src="https://user-images.githubusercontent.com/91251152/145023416-b244e4f3-f9ae-412c-89af-6367b3ff90b3.png">
   
-  El objetivo que tenemos es obtener el número de columnas de la matriz, entonces con ese objetivo, el orden que especificamos es el numeros de coeficientes del LPC. Además hemos de tener en cuenta una unidad extra porque el primer valor corresponde a la ganancia. Utilizamos el comando perl con el propósito de calcular el número de filas. Lo primero que hacemos es pasar el contenido de los archivos temporales nuestros, que son un conjunto de floats de 4 bytes concatenados a formato ASCII. De esta manera se genera un archivo con un valor ASCII en cada una de las lineas, y con el comando "wc -l" extraemos el número de lineas de este archivo. Así pues, conoceremos la cantidad de valores que tenía nuestro fichero temporal. Entonces, si ademas sabemos el numero de columnas podremos obtener la cantidad de filas de la matriz, lo que podemos hacer es una división de la cantidad de datos totales entre el numero de columnas.
+  El objetivo que tenemos es obtener el número de columnas de la matriz, para ello especificamos el orden que es el numeros de coeficientes del LPC. Además hemos de tener en cuenta una unidad extra debido a que el primer valor se corresponde con la ganancia. Utilizamos el comando perl con el propósito de calcular el número de filas. 
+  
+  Lo primero que hacemos es pasar el contenido de nuestros archivos temporales, siendo un conjunto de floats de 4 bytes concatenados a formato ASCII. De esta manera se genera un archivo con un valor ASCII en cada una de las lineas que podemos extraer con el comando "wc -l", obteniendo asi el numero de lineas del archivo. Gracias a lo anterior mencionado obtenemos la cantidad de valores que tenía nuestro fichero temporal. Si conociesemos el numero de columnas podriamos obtener la cantidad de filas de la matriz, al hacer es una división de la cantidad de datos totales entre el numero de columnas.
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
     
-    Es conveniente usar este formato porque nos permite obtener el número de filas de la matriz, ya que previamente hemos convertido la señal tipo .wav codificada con la ley mu de 8 bits a el formato fmatrix. De esta manera, cada columna determina cada uno de los coeficientes con los que hemos parametrizado la trama. Además, este formato nos permite trabajar con los datos de manera más sencilla. 
+    Es conveniente usar este formato, en el cual hemos pasado de una señal .wav codificada con la ley mu de 8 bits a el formato fmatrix permitiendonos obtener las señales ordenadas y caracterizadas por tramas y coeficientes. De esta manera, cada columna corresponde a los coeficientes con los que hemos parametrizado la trama y las filas hacen referencia a las tramas de senñal. Además, este formato nos permite trabajar con los datos de manera más sencilla y comoda al poder seleccionar columnas en especifico de los ficheros que queramos, esto se hace mediante los programas "fmatrix_show" y "fmatrix_cut". 
 
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
   
-  *****captura 10******
-  
-  Como podemos apreciar, la pipeline principal de la parametrización LPCC sigue la misma forma que la parametrización hecha previamente. Aunque con la diferencia   que ahora hay que tener en cuenta que para encontrar los coeficientes cepstrales antes necesitamos sacar los coeficientes LPC. Por este motivo, antes de autorizar  los datos de la parametrización cepstral al archivo .lpcc, tenemos que sacar con anterioridad los coeficientes LPC con el comando "lpc".
+  <img width="946" alt="Captura de Pantalla 2021-12-07 a les 13 01 28" src="https://user-images.githubusercontent.com/91251152/145025586-634aa3a5-c917-4307-af5c-aef7000c7063.png">
+
+  Para ello, hemos hecho uso de la plantilla wav2lp.sh para crear el script wav2lpcc.sh, este mismo lo incluimos en el script meson.build para luego compilar el programa y tenerlo incluido. Como podemos apreciar, la pipeline principal de la parametrización LPCC sigue la misma forma que la parametrización hecha previamente. Aunque con la diferencia que ahora hay que tener en cuenta que para encontrar los coeficientes cepstrales antes necesitamos sacar los coeficientes LPC. Por este motivo, antes de pasar los datos de la parametrización cepstral al archivo .lpcc, tenemos que sacar los coeficientes LPC con el comando "lpc". Finalmente utilizamos el comando "lpcc" para obtener los coeficientes LPCC.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
   
-  Ahora seguimos con la misma filosofia, sin embargo, ahora queremos obtener los coeficientes Mel-cepstrum, entonces con este proposito utilizaremos el comando "mfcc". En este comando especificamos el número de coeficientes y también el banco de filtros que utilizamos.
+  <img width="946" alt="Captura de Pantalla 2021-12-07 a les 13 08 06" src="https://user-images.githubusercontent.com/91251152/145026431-8e3feeaf-3f6a-4d06-b93a-e93fe7562f08.png">
+
+  Aplicando los mismos pasos que en el caso anterior pero ahora buscando los coeficientes Mel-cepstrum, utilizamos el comando "mfcc". En este comando especificamos el número de coeficientes y también el banco de filtros que utilizaremos.
 
 ### Extracción de características.
 
@@ -98,62 +93,61 @@ ejercicios indicados.
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
   
-  
-   *****captura 11******
+  <img width="639" alt="Captura de Pantalla 2021-12-07 a les 13 10 17" src="https://user-images.githubusercontent.com/91251152/145026703-fc5c81cc-622a-440f-93ce-27a53ce089ad.png">
+
+   <img width="650" alt="Captura de Pantalla 2021-12-07 a les 13 10 30" src="https://user-images.githubusercontent.com/91251152/145026730-88cf5be9-e82a-4638-bcb4-29ff4280dd9d.png">
    
-   *****captura 12******
-   
-   *****captura 13******
-   
+  <img width="602" alt="Captura de Pantalla 2021-12-07 a les 13 11 22" src="https://user-images.githubusercontent.com/91251152/145026820-c70d2eae-02c9-4192-8a7f-bf9c91c257b4.png">
+
   
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
     
-    Si nos fijamos en como está estructurada la fmatrix, como las columnas que nos dan la informacion del segundo y el tercer coeficientes son la cuarta y la quinta, las seleccionamos. Ya que por ejemplo si seleccionamos las columnas 2 y 3, estas pertenecen a la ganancia y por consiguiente la representación no seria la idonea para comprobar la correlación. 
+    Si nos fijamos en como está estructurada la fmatrix vemos que las columnas cuarta y quinta nos dan la informacion del segundo y el tercer coeficiente.
     
-    *****captura 14******
-    
+    <img width="1018" alt="Captura de Pantalla 2021-12-07 a les 13 14 41" src="https://user-images.githubusercontent.com/91251152/145027251-f7bbedec-5fbe-42df-99a7-174fa4e12f62.png">
+
     
   + ¿Cuál de ellas le parece que contiene más información?
 
-  Como podemos apreciar en la gráficas generadas anteriormente los coeficientes de las parametrizaciones MFCC y LPCC son mucho más dispersas, en consecuencia los coeficientes de MFCC y LPCC son más incorrelados que el caso LP. Además observamos una distribución más o menos lineal en el caso de la parametrización LP. Así pues la que contiene más información de las 3, es decir, la que es menos redundante y presenta mayor entropía es la parametrización MFCC.
+  Como podemos apreciar en las gráficas generadas anteriormente los coeficientes de las parametrizaciones MFCC y LPCC son mucho más dispersas, en consecuencia los coeficientes de MFCC y LPCC son más incorrelados que los LP. Además, observamos una distribución más o menos lineal en el caso de la parametrización LP. Así pues, la que contiene más información de las 3, es decir, la que es menos redundante y presenta mayor entropía es la parametrización MFCC.
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
   
-  Usamos el programa <code>pearson</code> como vemos a continuación:
+  Usamos el programa <code>pearson</code> para obtener los .txt:
   
-  *****captura 15******
+  <img width="1008" alt="Captura de Pantalla 2021-12-07 a les 13 19 25" src="https://user-images.githubusercontent.com/91251152/145027867-acfe7242-948f-49f9-947b-e88e0193ecb8.png">
+
+  Extraemos el coeficiente de correlación Pearson a partir de los ficheros que obtenemos. 
   
-  Extraemos el coeficiente de correlación Pearson con los ficheros que obtenemos. 
+  Para los coeficientes de predicción lineal (LP):
   
-  Para los coeficientes de predicción lineal:
+  <img width="312" alt="Captura de Pantalla 2021-12-07 a les 13 21 00" src="https://user-images.githubusercontent.com/91251152/145028057-0a19ee89-8345-46fc-9afc-86e285c355a1.png">
+
+  Para los coeficientes cepstrales (LPCC):
   
-  *****captura 16******
+  <img width="315" alt="Captura de Pantalla 2021-12-07 a les 13 21 53" src="https://user-images.githubusercontent.com/91251152/145028158-7c4bf9ab-f5c1-442b-8897-8d64bdfec842.png">
+
+  Para los coeficientes Mel-cepstrales (MFCC):
   
-  Para los coeficientes cepstrales:
-  
-  *****captura 17******
-  
-  Para los coeficientes Mel-cepstrales:
-  
-  *****captura 18******
+  <img width="313" alt="Captura de Pantalla 2021-12-07 a les 13 22 07" src="https://user-images.githubusercontent.com/91251152/145028196-f359b798-8c5a-4445-81e6-d9f7367de39c.png">
+
    
-  Nos queda la siguiente tabla:
+ Obtenemos la siguiente tabla:
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  | &rho;<sub>x</sub>[2,3] |   -0.666745    |   0.303116   |   0.0588095   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
 
-Observamos que los coeficientes LPCC y MFCC que hemos visto que eran los mas incorrelados, son los que tienen un coeficiente Pearson más cercano a 0. Sin embargo, los coeficientes LP los cuales eran  más correlados tienen un coeficiente de correlación Pearson más alejado del 0. Estos resultados que estamos comentando son razonables, ya que un valor cercano a -1 o +1 implica una elevada correlación entre componentes y nos permite estimar el valor de uno en función del otro. Mientras qye un valor cercano a 0 implica  que las componentes estan más incorreladas y que la información conjunta proporcionada por ambas componentes es el doble que la que nos proporciona una sola.
+Observamos que los coeficientes LPCC y MFCC que hemos visto eran los mas incorrelados, siendo los que tienen un coeficiente Pearson más cercano al 0. Sin embargo, los coeficientes LP los cuales eran  más correlados tienen un coeficiente de correlación Pearson más alejado del 0. Estos resultados que estamos comentando son razonables, ya que un valor cercano a -1 o +1 implica una elevada correlación entre componentes, permitiendonos estimar el valor de uno en función del otro. Mientras que un valor cercano a 0 implica que las componentes estan más incorreladas.
 
-   ***********
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
 
-Como hemos estudiado en la teoría de la asignatura, para el caso de los LPCC se aconseja trabajar con un orden de 13 coeficientes. Para los MFCC se recomienda usar entre 24 y 40 filtros del banco de mel, y unos 13 coeficientes Mel-Ceptrales. A partir de los 20 coeficientes, la información proporcionada por los coeficientes podría despistar al sistema de reconocimiento de voz.
+Como hemos estudiado en la teoría de la asignatura, para el caso de los LPCC se aconseja trabajar con un orden de 13 coeficientes. Para los MFCC se recomienda usar entre 24 y 40 filtros del banco de mel, y unos 13 coeficientes Mel-Ceptrales. A partir de los 20 coeficientes, la información proporcionada por los coeficientes podría confundir al sistema de reconocimiento de voz dando posibilidad a errores.
 
 ### Entrenamiento y visualización de los GMM.
 
