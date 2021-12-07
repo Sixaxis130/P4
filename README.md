@@ -109,20 +109,51 @@ ejercicios indicados.
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
     
+    Si nos fijamos en como está estructurada la fmatrix, como las columnas que nos dan la informacion del segundo y el tercer coeficientes son la cuarta y la quinta, las seleccionamos. Ya que por ejemplo si seleccionamos las columnas 2 y 3, estas pertenecen a la ganancia y por consiguiente la representación no seria la idonea para comprobar la correlación. 
+    
+    *****captura 14******
     
     
   + ¿Cuál de ellas le parece que contiene más información?
 
+  Como podemos apreciar en la gráficas generadas anteriormente los coeficientes de las parametrizaciones MFCC y LPCC son mucho más dispersas, en consecuencia los coeficientes de MFCC y LPCC son más incorrelados que el caso LP. Además observamos una distribución más o menos lineal en el caso de la parametrización LP. Así pues la que contiene más información de las 3, es decir, la que es menos redundante y presenta mayor entropía es la parametrización MFCC.
+
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+  
+  Usamos el programa <code>pearson</code> como vemos a continuación:
+  
+  *****captura 15******
+  
+  Extraemos el coeficiente de correlación Pearson con los ficheros que obtenemos. 
+  
+  Para los coeficientes de predicción lineal:
+  
+  *****captura 16******
+  
+  Para los coeficientes cepstrales:
+  
+  *****captura 17******
+  
+  Para los coeficientes Mel-cepstrales:
+  
+  *****captura 18******
+   
+  Nos queda la siguiente tabla:
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
   | &rho;<sub>x</sub>[2,3] |      |      |      |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+
+   ***********
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
+Para los LPCC se recomienda usar un orden de 13 coeficientes. Para los MFCC se recomienda usar:
+Entre 24 y 40 filtros del banco mel.
+Unos 13 coeficientes Mel-Ceptrales. A partir de 20 coeficientes, la información otorgada por los coeficientes podría confundir al sistema de reconocimiento de voz.
 
 ### Entrenamiento y visualización de los GMM.
 
