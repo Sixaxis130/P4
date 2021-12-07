@@ -147,13 +147,13 @@ ejercicios indicados.
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
 
+Observamos que los coeficientes LPCC y MFCC que hemos visto que eran los mas incorrelados, son los que tienen un coeficiente Pearson más cercano a 0. Sin embargo, los coeficientes LP los cuales eran  más correlados tienen un coeficiente de correlación Pearson más alejado del 0. Estos resultados que estamos comentando son razonables, ya que un valor cercano a -1 o +1 implica una elevada correlación entre componentes y nos permite estimar el valor de uno en función del otro. Mientras qye un valor cercano a 0 implica  que las componentes estan más incorreladas y que la información conjunta proporcionada por ambas componentes es el doble que la que nos proporciona una sola.
+
    ***********
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
 
-Para los LPCC se recomienda usar un orden de 13 coeficientes. Para los MFCC se recomienda usar:
-Entre 24 y 40 filtros del banco mel.
-Unos 13 coeficientes Mel-Ceptrales. A partir de 20 coeficientes, la información otorgada por los coeficientes podría confundir al sistema de reconocimiento de voz.
+Como hemos estudiado en la teoría de la asignatura, para el caso de los LPCC se aconseja trabajar con un orden de 13 coeficientes. Para los MFCC se recomienda usar entre 24 y 40 filtros del banco de mel, y unos 13 coeficientes Mel-Ceptrales. A partir de los 20 coeficientes, la información proporcionada por los coeficientes podría despistar al sistema de reconocimiento de voz.
 
 ### Entrenamiento y visualización de los GMM.
 
