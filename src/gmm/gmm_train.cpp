@@ -56,18 +56,26 @@ int main(int argc, const char *argv[]) {
   /// initicialization accordingly.
   switch (init_method) {
   case 0:
+  // Inicializamos las GMM de forma aleatoria
+  gmm.random_init(data, nmix);
     break;
   case 1:
+  // Inicializamos las GMM utilizando VQ
+  gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
     break;
   case 2:
+  // Inicializamos las GMM utilizando EM
+  gmm.em_split(data, nmix, init_iterations, init_threshold, verbose);
     break;
   default:
     ;
   }
-
+  /// \DONE Implementadas las inicializaciones de el random, vq y em
+  
   /// \TODO Apply EM to estimate GMM parameters (complete the funcion in gmm.cpp)
-
-
+  gmm.em(data, em_iterations, em_threshold, verbose);
+  /// \DONE Implementada la estimación de los parametros GMM utilizando EM para mejorar los modelos
+  
   //Create directory, if it is needed
   gmm_filename.checkDir();
   //Save gmm
