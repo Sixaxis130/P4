@@ -184,9 +184,9 @@ Complete el código necesario para entrenar modelos GMM.
  
  <img width="602" alt="Captura de Pantalla 2021-12-10 a les 9 59 07" src="https://user-images.githubusercontent.com/91251152/145546507-e585897a-ee64-4fce-8148-411bf9f6c279.png">
 
-Comparanando las dos gráficas de las GMM, observamos con claridad que la primera gráfica modela mucho mejor al locutor que la segunda gráfica.
+Comparanando las dos gráficas de las GMM, observamos con claridad que la primera gráfica modela mucho mejor al locutor que la segunda gráfica. Esto era de esperar ya que la GMM que corresponde al locutor anterior es la que se adapta mejor a sus muestras. En este caso no estamos utilizando el mismo locutor haciendo que no se modele tan bien como el caso anterior.
 
-Ahora lo hacemos con otro mas diferente para tener varios ejemplos:
+Hacemos el mismo procedimiento con otro diferente para tener varios ejemplos:
 
 <img width="866" alt="Captura de Pantalla 2021-12-10 a les 10 02 19" src="https://user-images.githubusercontent.com/91251152/145546936-c8ed82da-e3eb-4554-8a6d-ad647d58d5a4.png">
 
