@@ -156,9 +156,41 @@ Complete el código necesario para entrenar modelos GMM.
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
   
+  <img width="562" alt="Captura de Pantalla 2021-12-10 a les 9 42 16" src="https://user-images.githubusercontent.com/91251152/145543916-f52fe893-792c-430c-8941-a46972268cc8.png">
+  
+  Hemos obtenido la gráfica con el siguiente comando:
+  
+  <img width="850" alt="Captura de Pantalla 2021-12-10 a les 9 45 49" src="https://user-images.githubusercontent.com/91251152/145544436-13cefd35-b8db-4ae2-a1d4-8debb1fe8d93.png">
+
+
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+  
+  Ahora representamos la GMM con las muestras del locutor al que corresponde con el siguiente comando:
+  
+ <img width="850" alt="Captura de Pantalla 2021-12-10 a les 9 47 34" src="https://user-images.githubusercontent.com/91251152/145544776-fde450d6-cf5d-4d24-9595-83492ce06fb1.png">
+ 
+ Obtenemos la gráfica siguiente:
+ 
+ <img width="593" alt="Captura de Pantalla 2021-12-10 a les 9 50 29" src="https://user-images.githubusercontent.com/91251152/145545203-aa3efb6f-a5de-4886-a887-e736aa038f0c.png">
+ 
+ 
+ A continuación representamos la GMM anterior con las muestras de un nuevo locutor al que no corresponde con el siguiente comando:
+ 
+ <img width="1003" alt="Captura de Pantalla 2021-12-10 a les 9 57 45" src="https://user-images.githubusercontent.com/91251152/145546304-be7b92eb-2a87-413b-83ca-d677d04c3d98.png">
+ 
+ Obtenemos la gráfica siguiente:
+ 
+ <img width="602" alt="Captura de Pantalla 2021-12-10 a les 9 59 07" src="https://user-images.githubusercontent.com/91251152/145546507-e585897a-ee64-4fce-8148-411bf9f6c279.png">
+
+Comparanando las dos gráficas de las GMM, observamos con claridad que la primera gráfica modela mucho mejor al locutor que la segunda gráfica.
+
+Ahora lo hacemos con otro mas diferente para tener varios ejemplos:
+
+<img width="866" alt="Captura de Pantalla 2021-12-10 a les 10 02 19" src="https://user-images.githubusercontent.com/91251152/145546936-c8ed82da-e3eb-4554-8a6d-ad647d58d5a4.png">
+
+<img width="615" alt="Captura de Pantalla 2021-12-10 a les 10 03 28" src="https://user-images.githubusercontent.com/91251152/145547091-513efed4-896e-4cde-938c-7a9dbd8faa9b.png">
 
 ### Reconocimiento del locutor.
 
@@ -166,6 +198,21 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+  
+  
+  Adjuntamos a continuación los resultados obtenidos haciendo uso de los parámetros que mejor nos han funcionado para la parametrización MFCC.
+Hemos usado 8 coeficientes de predicción lineal Hemos usado 13 coeficientes cepstrales
+Hemos usado 16 coeficientes Mel-Cepstrales y 24 filtros del banco de filtros. Haber conseguido los mejores resultados con este número de coeficientes nos ha sorprendido un poco. Cierto es que hasta 20 coeficientes Mel-Cepstrales según dicta la teoría aun puede haber información relevante para un sistema de reconocimiento de voz, pero tambien sabemos que la mayor parte de esta se concentra en los 13 primeros. Estos 3 coeficientes de más han supuesto para nosotros llegar a unos resultados aceptables. 
+
+tasa error lp:
+<img width="818" alt="Captura de Pantalla 2021-12-10 a les 10 06 19" src="https://user-images.githubusercontent.com/91251152/145547514-ee37a8f9-fc52-42ef-bcaa-5864198a9ddf.png">
+
+tasa error lpcc:
+<img width="682" alt="Captura de Pantalla 2021-12-10 a les 10 06 35" src="https://user-images.githubusercontent.com/91251152/145547546-6044dbd1-b59a-4fe1-87f9-26eddd11c85e.png">
+
+tasa error mfcc:
+<img width="681" alt="Captura de Pantalla 2021-12-10 a les 10 06 53" src="https://user-images.githubusercontent.com/91251152/145547590-7d38aeac-2a3b-48dc-a297-c687d7e478ac.png">
+
 
 ### Verificación del locutor.
 
