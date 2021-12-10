@@ -199,20 +199,30 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
 
-Hemos usado 8 coeficientes LP, 13 coeficientes LPCC, 16 coeficientes MFCC y 24 filtros del banco de filtros.
+Hemos usado 8 coeficientes LP, 13 coeficientes LPCC, 16 coeficientes MFCC y 24 filtros del banco de filtros. Sabemos por teoria que donde hay más información relevante es en los primeros 13 coeficientes Mel-cepstrales, pero hemos obtenido mejores resultados utilizando 16 coeficientes.
 
-tasa error lp:
+Tasa error LP:
 
 <img width="818" alt="Captura de Pantalla 2021-12-10 a les 10 06 19" src="https://user-images.githubusercontent.com/91251152/145547514-ee37a8f9-fc52-42ef-bcaa-5864198a9ddf.png">
 
-tasa error lpcc:
+Tasa error LPCC:
 
 <img width="682" alt="Captura de Pantalla 2021-12-10 a les 10 06 35" src="https://user-images.githubusercontent.com/91251152/145547546-6044dbd1-b59a-4fe1-87f9-26eddd11c85e.png">
 
-tasa error mfcc:
+Tasa error MFCC:
 
 <img width="681" alt="Captura de Pantalla 2021-12-10 a les 10 06 53" src="https://user-images.githubusercontent.com/91251152/145547590-7d38aeac-2a3b-48dc-a297-c687d7e478ac.png">
 
+
+|                        | LP   | LPCC | MFCC |
+  |------------------------|:----:|:----:|:----:|
+  | Error Rate |   14,27%   |   2,68%   |  1,15%  |
+  
+Hemos obtenido estos resultados debido a la eleccion de los siguientes parametros para el gmm_train:
+
+<img width="1171" alt="Captura de Pantalla 2021-12-10 a les 11 12 31" src="https://user-images.githubusercontent.com/91251152/145557138-f6692dde-8a3e-4b40-a7f0-b8dd723fa9c1.png">
+
+Hemos inicializado utilizando el VQ, haciendo uso de 55 gaussianas con un umbral de 0,013 iterando 60 veces.
 
 ### Verificación del locutor.
 
