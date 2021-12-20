@@ -49,7 +49,7 @@ float verify(const GMM &gmm_candidate, const GMM & gmm_world, const fmatrix &dat
   score = lprobcand - lprobbackground;
 
   return score;
-  /// \DONE Implementada la verificación de el score mediante el 
+  /// \DONE Implementada la verificación de el score mediante el world model basado en los candidatos de gmm
 }
 
 

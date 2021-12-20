@@ -40,7 +40,7 @@ if [[ $# < 1 ]]; then
    echo "  classerr: count errors in speaker recognition"
    echo "trainworld: estimate world model for speaker verification"
    echo "    verify: test gmm in verification task"
-   echo " verifyerr: count errors of verify"
+   echo " verif_err: count errors of verify"
    echo "finalclass: reserved for final test in the classification task"
    echo "finalverif: reserved for final test in the verification task"
    echo ""
@@ -90,25 +90,31 @@ fi
 # - Select (or change) different features, options, etc. Make you best choice and try several options.
 # \DONE Funciones implementadas compute_mfcc() y compute_lpcc()
 compute_lp() {
-    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
+    db_sen=$1
+    shift
+    for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lp 8 $db/$filename.wav $w/$FEAT/$filename.$FEAT" #orden LPC
+        EXEC="wav2lp 8 $db_sen/$filename.wav $w/$FEAT/$filename.$FEAT" #orden LPC
         echo $EXEC && $EXEC || exit 1
     done
 }
 
 compute_lpcc() {
-    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
+    db_sen1=$1
+    shift
+    for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc 8 13 $db/$filename.wav $w/$FEAT/$filename.$FEAT" #orden LPC y orden LPCC
+        EXEC="wav2lpcc 8 13 $db_sen1/$filename.wav $w/$FEAT/$filename.$FEAT" #orden LPC y orden LPCC
         echo $EXEC && $EXEC || exit 1
     done
 }
 
 compute_mfcc() {
-    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
+    db_sen2=$1
+    shift
+    for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2mfcc 8 16 24 $db/$filename.wav $w/$FEAT/$filename.$FEAT"  #Frecuencia de muestreo, orden del MFCC y orden del banco de filtros
+        EXEC="wav2mfcc 8 16 24 $db_sen2/$filename.wav $w/$FEAT/$filename.$FEAT"  #Frecuencia de muestreo, orden del MFCC y orden del banco de filtros
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -179,9 +185,11 @@ for cmd in $*; do
 	   #   * <code> gmm_verify ... | tee $w/verif_${FEAT}_${name_exp}.log </code>
        #echo "Implement the verify option ..."
        # \DONE Implementada la verificación
-       (gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list  $lists/verif/all.test $lists/verif/all.test.candidates |
+       #(gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list  $lists/verif/all.test $lists/verif/all.test.candidates |
+        #     tee $w/verif_${FEAT}_${name_exp}.log) || exit 1
+        
+        (gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list  $lists/verif/all.test $lists/verif/all.test.candidates |
              tee $w/verif_${FEAT}_${name_exp}.log) || exit 1
-
 
    elif [[ $cmd == verif_err ]]; then
        if [[ ! -s $w/verif_${FEAT}_${name_exp}.log ]] ; then
@@ -201,6 +209,9 @@ for cmd in $*; do
        #echo "To be implemented ..."
        # \DONE Implementación de finalclass hecha
        compute_$FEAT $db_test $lists/final/class.test #Parametrizamos la base de datos
+
+       #(gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list  $lists/final/class.test | tee class_test.log) || exit 1
+
        (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list  $lists/final/class.test | tee $w/class_final_${FEAT}_${name_exp}.log) | tee class_test0.log || exit 1
        cat class_test0.log | cut -f1,2 >class_test.log
        rm class_test0.log
@@ -215,18 +226,25 @@ for cmd in $*; do
        #echo "To be implemented ..."
        # \DONE Implementación de finalverif hecha
         compute_$FEAT $db_test $lists/final/verif.test #Parametrizamos la base de datos
+
+        #(gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list  $lists/final/verif.users $lists/verif/all.test $lists/verif/verif.test.candidates |
+         #    tee $w/verif_final.log) || exit 1
+
         (gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list  $lists/final/verif.test $lists/final/verif.test.candidates |
              tee $w/final_verif_${FEAT}_${name_exp}.log) || exit 1
         perl -ane 'print "$F[0]\t$F[1]\t";
-        if ($F[2] >  0.339083542536492) {print "1\n"}  
-        else {print "0\n"}' tee $w/final_verif_${FEAT}_${name_exp}.log | tee verif_test.log
+                    if ($F[2] >  0.38829797851099) {print "1\n"}  
+                    else {print "0\n"}' tee $w/final_verif_${FEAT}_${name_exp}.log | tee verif_test.log
+        #perl -ane 'print "$F[0]\t$F[1]\t";
+         #           if ($F[2] > 0.453540631154395) {print "1\n"}  
+          #          else {print "0\n"}' $w/verif_final.log | tee verif_final.log
       # Cambiamos el umbral por el optimo al tener el sistema bien entrenado
    
    # If the command is not recognize, check if it is the name
    # of a feature and a compute_$FEAT function exists.
    elif [[ "$(type -t compute_$cmd)" = function ]]; then
 	   FEAT=$cmd
-       compute_$FEAT       
+       compute_$FEAT $db $lists/class/all.train $lists/class/all.test      
    else
        echo "undefined command $cmd" && exit 1
    fi
