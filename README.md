@@ -232,11 +232,33 @@ Complete el código necesario para realizar verificación del locutor y optimice
   de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
+  
+  Gracias a la implementación del apartado anterior vemos que los resultados con MFCC son los mejores para el reconocimiento de voz. Hemos obtenido los siguientes resultados con la verificación:
+  
+  Resultados con MFCC:
+  
+  ![image](https://user-images.githubusercontent.com/71181207/146814191-e6bff918-d892-4512-af89-6d452f4e4f4e.png)
+ 
+ |                        | Umbral Óptimo   | Pérdidas | Falsas Alarmas | Cost Detection |
+  |------------------------|:----:|:----:|:----:|:----:|
+  | Verificación usando MFCC |   0.38829797851099   |   24/250 = 0.0960   |  1/1000 = 0.0010  | 10.5 |
+ 
+ Para obtener estos resultados no hemos tocado los modelos de usuarios ya entrenados ya que la probabilidad de la GMM del usuario es muy variable al igual que la del impostor. Por ello hemos procedido a entrenar con el modelo del mundo, normalizando esta probabilidad respecto un modelo general como el mencionado.
+ 
+ Hemos obtenido estos resultados debido a la eleccion de los siguientes parametros para el gmm_train:
+
+![image](https://user-images.githubusercontent.com/71181207/146814492-aeeaa140-6a5e-44d3-852c-600199f23930.png)
+ 
+ Hemos inicializado utilizando el VQ, haciendo uso de 60 gaussianas con un umbral de 0,02 iterando 35 veces.
  
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+
+Hemos utilizado los parámetros con los que hemos obtenido mejores puntuaciones en la base de datos SPEECON, empleando los mismos tanto para la clasificación como para la verificación final. 
+
+Aunque el número de gaussianas en el train y en el trainworld estan definidas de forma muy concreta, nos hemos enfocado a optimizar el umbral del criterio de parada del algoritmo EM para así evitar en lo máximo posible el overfitting y el overtraining. Decidimos hacerlo de esta manera debido a que nos hacen más dificil el extrapolar los parámetros a otras bases de datos o reconocimiento de señales distintas, obteniendo así unos modelos más generalizables como consecuencia. Otra cosa que aprendimos y decidimos aplicar fue que si ajustamos el número de iteraciones de la inicialización o el umbral de decisión es posible obtener un sistema de reconocimiento y verificación más generalizables, y con ello obtener un mejor funcionamiento de los mismos.
 
 ### Trabajo de ampliación.
 
