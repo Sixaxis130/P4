@@ -156,9 +156,41 @@ Complete el código necesario para entrenar modelos GMM.
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
   
+  <img width="562" alt="Captura de Pantalla 2021-12-10 a les 9 42 16" src="https://user-images.githubusercontent.com/91251152/145543916-f52fe893-792c-430c-8941-a46972268cc8.png">
+  
+  Hemos obtenido la gráfica con el siguiente comando:
+  
+  <img width="850" alt="Captura de Pantalla 2021-12-10 a les 9 45 49" src="https://user-images.githubusercontent.com/91251152/145544436-13cefd35-b8db-4ae2-a1d4-8debb1fe8d93.png">
+
+
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+  
+  Ahora representamos la GMM con las muestras del locutor al que corresponde con el siguiente comando:
+  
+ <img width="850" alt="Captura de Pantalla 2021-12-10 a les 9 47 34" src="https://user-images.githubusercontent.com/91251152/145544776-fde450d6-cf5d-4d24-9595-83492ce06fb1.png">
+ 
+ Obtenemos la gráfica siguiente:
+ 
+ <img width="593" alt="Captura de Pantalla 2021-12-10 a les 9 50 29" src="https://user-images.githubusercontent.com/91251152/145545203-aa3efb6f-a5de-4886-a887-e736aa038f0c.png">
+ 
+ 
+ A continuación representamos la GMM anterior con las muestras de un nuevo locutor al que no corresponde con el siguiente comando:
+ 
+ <img width="1003" alt="Captura de Pantalla 2021-12-10 a les 9 57 45" src="https://user-images.githubusercontent.com/91251152/145546304-be7b92eb-2a87-413b-83ca-d677d04c3d98.png">
+ 
+ Obtenemos la gráfica siguiente:
+ 
+ <img width="602" alt="Captura de Pantalla 2021-12-10 a les 9 59 07" src="https://user-images.githubusercontent.com/91251152/145546507-e585897a-ee64-4fce-8148-411bf9f6c279.png">
+
+Comparanando las dos gráficas de las GMM, observamos con claridad que la primera gráfica modela mucho mejor al locutor que la segunda gráfica. Esto era de esperar ya que la GMM que corresponde al locutor anterior es la que se adapta mejor a sus muestras. En este caso no estamos utilizando el mismo locutor haciendo que no se modele tan bien como el caso anterior.
+
+Hacemos el mismo procedimiento con otro diferente para tener varios ejemplos:
+
+<img width="866" alt="Captura de Pantalla 2021-12-10 a les 10 02 19" src="https://user-images.githubusercontent.com/91251152/145546936-c8ed82da-e3eb-4554-8a6d-ad647d58d5a4.png">
+
+<img width="615" alt="Captura de Pantalla 2021-12-10 a les 10 03 28" src="https://user-images.githubusercontent.com/91251152/145547091-513efed4-896e-4cde-938c-7a9dbd8faa9b.png">
 
 ### Reconocimiento del locutor.
 
@@ -166,6 +198,31 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+
+Hemos usado 8 coeficientes LP, 13 coeficientes LPCC, 16 coeficientes MFCC y 24 filtros del banco de filtros. Sabemos por teoria que donde hay más información relevante es en los primeros 13 coeficientes Mel-cepstrales, pero hemos obtenido mejores resultados utilizando 16 coeficientes.
+
+Tasa error LP:
+
+<img width="818" alt="Captura de Pantalla 2021-12-10 a les 10 06 19" src="https://user-images.githubusercontent.com/91251152/145547514-ee37a8f9-fc52-42ef-bcaa-5864198a9ddf.png">
+
+Tasa error LPCC:
+
+<img width="682" alt="Captura de Pantalla 2021-12-10 a les 10 06 35" src="https://user-images.githubusercontent.com/91251152/145547546-6044dbd1-b59a-4fe1-87f9-26eddd11c85e.png">
+
+Tasa error MFCC:
+
+<img width="681" alt="Captura de Pantalla 2021-12-10 a les 10 06 53" src="https://user-images.githubusercontent.com/91251152/145547590-7d38aeac-2a3b-48dc-a297-c687d7e478ac.png">
+
+
+|                        | LP   | LPCC | MFCC |
+  |------------------------|:----:|:----:|:----:|
+  | Error Rate |   14,27%   |   2,68%   |  1,15%  |
+  
+Hemos obtenido estos resultados debido a la eleccion de los siguientes parametros para el gmm_train:
+
+<img width="1171" alt="Captura de Pantalla 2021-12-10 a les 11 12 31" src="https://user-images.githubusercontent.com/91251152/145557138-f6692dde-8a3e-4b40-a7f0-b8dd723fa9c1.png">
+
+Hemos inicializado utilizando el VQ, haciendo uso de 55 gaussianas con un umbral de 0,013 iterando 60 veces.
 
 ### Verificación del locutor.
 
