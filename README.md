@@ -235,14 +235,16 @@ Complete el código necesario para realizar verificación del locutor y optimice
   
   Gracias a la implementación del apartado anterior vemos que los resultados con MFCC son los mejores para el reconocimiento de voz. Hemos obtenido los siguientes resultados con la verificación:
   
-  Resultados con MFCC:
+  Resultados con MFCC, primero umbral encontrado por el propio programa y luego umbral a partir de donde no tenemos Falsas Alarmas:
   
   ![image](https://user-images.githubusercontent.com/71181207/146814191-e6bff918-d892-4512-af89-6d452f4e4f4e.png)
+  ![image](https://user-images.githubusercontent.com/71181207/147057293-94ecca0c-0059-421a-9e03-c13f28897f0e.png)
  
  |                        | Umbral Óptimo   | Pérdidas | Falsas Alarmas | Cost Detection |
   |------------------------|:----:|:----:|:----:|:----:|
-  | Verificación usando MFCC |   0.38829797851099   |   24/250 = 0.0960   |  1/1000 = 0.0010  | 10.5 |
- 
+  | Verificación MFCC Programa permisivo |   0.38829797851099   |   24/250 = 0.0960   |  1/1000 = 0.0010  | 10.5 |
+  | Verificación MFCC Mejor Resultado estricto |   0.43   |   25/250 = 0.1   |  0/1000 = 0  | 10.0 |
+   
  Para obtener estos resultados no hemos tocado los modelos de usuarios ya entrenados ya que la probabilidad de la GMM del usuario es muy variable al igual que la del impostor. Por ello hemos procedido a entrenar con el modelo del mundo, normalizando esta probabilidad respecto un modelo general como el mencionado.
  
  Hemos obtenido estos resultados debido a la eleccion de los siguientes parametros para el gmm_train:
